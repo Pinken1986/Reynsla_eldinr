@@ -1,0 +1,15 @@
+{
+  "variants": {
+    "energy=0": { "model": "reynsla_eldingr:block/xp_glowstone_lamp_off" },
+    "energy=1": { "model": "reynsla_eldingr:block/xp_glowstone_lamp_on" },
+    "energy=2": { "model": "reynsla_eldingr:block/xp_glowstone_lamp_on" },
+    "energy=3": { "model": "reynsla_eldingr:block/xp_glowstone_lamp_on" },
+    "energy=4": { "model": "reynsla_eldingr:block/xp_glowstone_lamp_on" },
+    "energy=5": { "model": "reynsla_eldingr:block/xp_glowstone_lamp_on" },
+    "energy=6": { "model": "reynsla_eldingr:block/xp_glowstone_lamp_on" },
+    "energy=7": { "model": "reynsla_eldingr:block/xp_glowstone_lamp_on" },
+    "energy=8": { "model": "reynsla_eldingr:block/xp_glowstone_lamp_on" },
+    "energy=9": { "model": "reynsla_eldingr:block/xp_glowstone_lamp_on" },
+    "energy=10": { "model": "reynsla_eldingr:block/xp_glowstone_lamp_on" }
+  }
+}

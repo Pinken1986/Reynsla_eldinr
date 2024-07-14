@@ -2,29 +2,36 @@
   "schemaVersion": 1,
   "id": "reynsla_eldingr",
   "version": "${version}",
-  "name": "Reynsla_eldingr",
-  "description": "",
-  "authors": [],
+  "name": "Reynsla Eldingr",
+  "description": "A mod that makes players emit energy from XP",
+  "authors": [
+    "Your Name"
+  ],
   "contact": {
-    "repo": "https://github.com/tynih/Reynsla_eldingr"
+    "homepage": "https://fabricmc.net/",
+    "sources": "https://github.com/YourGithubUsername/reynsla_eldingr"
   },
-  "license": "All-Rights-Reserved",
+  "license": "MIT",
   "icon": "assets/reynsla_eldingr/icon.png",
-  "environment": "client",
+  "environment": "*",
   "entrypoints": {
-    "client": [
-      "com.tynicraft.reynsla_eldingr.client.Reynsla_eldingrClient"
-    ],
     "main": [
       "com.tynicraft.reynsla_eldingr.Reynsla_eldingr"
+    ],
+    "client": [
+      "com.tynicraft.reynsla_eldingr.Reynsla_eldingr_Client"
     ]
   },
   "mixins": [
     "reynsla_eldingr.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=${loader_version}",
+    "fabricloader": ">=0.16.0",
     "fabric": "*",
-    "minecraft": "${minecraft_version}"
+    "minecraft": "1.17.1",
+    "java": ">=16"
+  },
+  "suggests": {
+    "another-mod": "*"
   }
 }
