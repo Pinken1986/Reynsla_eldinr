@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "id": "reynsla_eldingr",
+  "version": "${version}",
+  "name": "Reynsla_eldingr",
+  "description": "",
+  "authors": [],
+  "contact": {
+    "repo": "https://github.com/tynih/Reynsla_eldingr"
+  },
+  "license": "All-Rights-Reserved",
+  "icon": "assets/reynsla_eldingr/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "com.tynicraft.reynsla_eldingr.client.Reynsla_eldingrClient"
+    ],
+    "main": [
+      "com.tynicraft.reynsla_eldingr.Reynsla_eldingr"
+    ]
+  },
+  "mixins": [
+    "reynsla_eldingr.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}
