@@ -17,17 +17,18 @@ import net.minecraft.server.world.ServerWorld;
 import java.util.Random;
 
 public class XpGlowstoneLampBlock extends Block implements XpEnergyReceiver {
-    public static final IntProperty ENERGY = IntProperty.of("energy", 0, 10);
-    public static final int TICKS_PER_ENERGY = 200; // 10 seconds at 20 ticks per second
-    public static final int MAX_ENERGY = 10; // 10 units of energy, each lasting 10 seconds
+    public static final IntProperty ENERGY = IntProperty.of("energy", 0, 2);
+    public static final int TICKS_PER_ENERGY = 1200;  // changing TICKS_PER_ENERGY to 1 minute
+    public static final int MAX_ENERGY = 2;
 
     public XpGlowstoneLampBlock(Settings settings) {
         super(settings.luminance((state) -> state.get(ENERGY) > 0 ? 15 : 0));
-        setDefaultState(getDefaultState().with(ENERGY, 0));
+        setDefaultState(getStateManager().getDefaultState().with(ENERGY, 0));
     }
 
     @Override
     protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+        super.appendProperties(builder);
         builder.add(ENERGY);
     }
 
@@ -41,7 +42,7 @@ public class XpGlowstoneLampBlock extends Block implements XpEnergyReceiver {
         synchronized (this) {
             BlockState state = world.getBlockState(pos);
             int currentEnergy = state.get(ENERGY);
-            int newEnergy = Math.min(currentEnergy + amount, MAX_ENERGY);
+            int newEnergy = Math.min(currentEnergy + (amount * 2), MAX_ENERGY);
             world.setBlockState(pos, state.with(ENERGY, newEnergy));
             if (!world.getBlockTickScheduler().isScheduled(pos, this)) {
                 world.getBlockTickScheduler().schedule(pos, this, TICKS_PER_ENERGY);
@@ -57,13 +58,8 @@ public class XpGlowstoneLampBlock extends Block implements XpEnergyReceiver {
 
     @SuppressWarnings("deprecation")
     @Override
-    public void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
-    }
-
-    @SuppressWarnings("deprecation")
-    @Override
     public boolean hasRandomTicks(BlockState state) {
-        return false;
+        return true;
     }
 
     @SuppressWarnings("deprecation")

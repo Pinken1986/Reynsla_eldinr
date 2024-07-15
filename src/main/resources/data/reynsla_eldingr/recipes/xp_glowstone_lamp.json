@@ -1,16 +1,19 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "GGG",
-    "GCG",
-    "GGG"
+    "GRG",
+    "RBR",
+    "GRG"
   ],
   "key": {
     "G": {
-      "item": "minecraft:glass"
+      "item": "minecraft:glowstone_dust"
     },
-    "C": {
-      "item": "minecraft:copper_ingot"
+    "R": {
+      "item": "minecraft:redstone"
+    },
+    "B": {
+      "item": "minecraft:glass_bottle"
     }
   },
   "result": {

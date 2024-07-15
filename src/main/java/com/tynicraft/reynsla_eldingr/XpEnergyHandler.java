@@ -4,21 +4,42 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.LiteralText;
 import net.minecraft.util.math.BlockPos;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.PriorityQueue;
 
-import java.util.List;
 
 public class XpEnergyHandler {
+    private static final Map<BlockPos, PriorityQueue<PlayerEntity>> receivers = new HashMap<>();
 
-    private static boolean canDrainExperience(PlayerEntity player) {
-        // Add your real implementation here
-        return false;
+    public static void requestEnergyTransfer(PlayerEntity player, BlockPos receiverPosition) {
+        receivers.computeIfAbsent(receiverPosition, pos -> new PriorityQueue<>(
+                Comparator.comparing(PlayerEntity::getScore).reversed())
+        ).add(player);
     }
 
-    public static void transferExperienceToReceivers(PlayerEntity player, List<BlockPos> receiverPositions, ServerWorld world) {
-        if (!canDrainExperience(player)) {
-            player.sendMessage(new LiteralText("You do not have enough experience."), false);
-            return;
-        }
-        // Add the rest of your implementation here...
+    private static boolean canDrainExperience(PlayerEntity player) {
+        return player.experienceLevel > 0;
+    }
+
+    public static void processEnergyTransfers(ServerWorld world) {
+        receivers.forEach((receiverPosition, playerPriorityQueue) -> {
+            if (!playerPriorityQueue.isEmpty()) {
+                PlayerEntity player = playerPriorityQueue.peek();
+
+                if (canDrainExperience(player)) {
+                    transferExperienceToReceiver(player, receiverPosition, world);
+                    playerPriorityQueue.remove(); // experience has been transferred, remove this player
+                } else {
+                    player.sendMessage(new LiteralText("You do not have enough experience."), false);
+                }
+            }
+        });
+        receivers.entrySet().removeIf(entry -> entry.getValue().isEmpty());
+    }
+
+    private static void transferExperienceToReceiver(PlayerEntity player, BlockPos receiverPosition, ServerWorld world) {
+        XpEnergyEmitter.transferExperienceToEnergy(world);
     }
 }
