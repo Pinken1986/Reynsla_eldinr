@@ -1,6 +1,6 @@
 {
-  "parent": "item/generated",
+  "parent": "block/cube_all",
   "textures": {
-    "layer0": "reynsla_eldingr:item/xp_glowstone_lamp"
+    "all": "reynsla_eldingr:block/xp_glowstone_lamp_off"
   }
 }
