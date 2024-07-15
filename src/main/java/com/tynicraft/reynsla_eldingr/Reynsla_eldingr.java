@@ -2,7 +2,11 @@ package com.tynicraft.reynsla_eldingr;
 
 import com.tynicraft.reynsla_eldingr.Blocks.GlowstoneLamp.XpGlowstoneLampBlock;
 import com.tynicraft.reynsla_eldingr.Blocks.GlowstoneLamp.XpGlowstoneLampBlockEntity;
+import com.tynicraft.reynsla_eldingr.Blocks.GlowstoneLamp.XpGlowstoneLampBlockEntityRenderer;
+import com.tynicraft.reynsla_eldingr.client.XpProgressHud;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
@@ -22,31 +26,19 @@ public class Reynsla_eldingr implements ModInitializer {
     public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
 
     // Block
-    public static final XpGlowstoneLampBlock XP_GLOWSTONE_LAMP = createXpGlowstoneLampBlock();
+    public static final XpGlowstoneLampBlock XP_GLOWSTONE_LAMP = new XpGlowstoneLampBlock(
+            FabricBlockSettings.of(Material.REDSTONE_LAMP)
+                    .strength(0.3F)
+                    .luminance((state) -> state.get(XpGlowstoneLampBlock.ENERGY) > 0 ? 15 : 0)
+    );
 
     // Block Entity
-    public static BlockEntityType<XpGlowstoneLampBlockEntity> XP_GLOWSTONE_LAMP_BLOCK_ENTITY = createXpGlowstoneLampBlockEntity();
+    public static BlockEntityType<XpGlowstoneLampBlockEntity> XP_GLOWSTONE_LAMP_BLOCK_ENTITY;
 
     @Override
     public void onInitialize() {
         LOGGER.info("Initializing Reynsla Eldingr mod");
-        registerXpGlowstoneLamp();
-        LOGGER.info("Reynsla Eldingr mod initialized");
-    }
 
-    private static XpGlowstoneLampBlock createXpGlowstoneLampBlock() {
-        return new XpGlowstoneLampBlock(
-                FabricBlockSettings.of(Material.REDSTONE_LAMP)
-                        .strength(0.3F)
-                        .ticksRandomly()
-        );
-    }
-
-    private static BlockEntityType<XpGlowstoneLampBlockEntity> createXpGlowstoneLampBlockEntity() {
-        return FabricBlockEntityTypeBuilder.create(XpGlowstoneLampBlockEntity::new, XP_GLOWSTONE_LAMP).build(null);
-    }
-
-    private void registerXpGlowstoneLamp() {
         // Register Block
         Registry.register(Registry.BLOCK, new Identifier(MOD_ID, "xp_glowstone_lamp"), XP_GLOWSTONE_LAMP);
 
@@ -58,11 +50,22 @@ public class Reynsla_eldingr implements ModInitializer {
         XP_GLOWSTONE_LAMP_BLOCK_ENTITY = Registry.register(
                 Registry.BLOCK_ENTITY_TYPE,
                 new Identifier(MOD_ID, "xp_glowstone_lamp"),
-                XP_GLOWSTONE_LAMP_BLOCK_ENTITY);
+                FabricBlockEntityTypeBuilder.create(XpGlowstoneLampBlockEntity::new, XP_GLOWSTONE_LAMP).build(null)
+        );
 
         // Register Server Tick Event for XP Energy Emission
         ServerTickEvents.END_SERVER_TICK.register(server -> {
             server.getWorlds().forEach(XpEnergyEmitter::transferExperienceToEnergy);
         });
+
+        // Register Block Entity Renderer
+        BlockEntityRendererRegistry.register(XP_GLOWSTONE_LAMP_BLOCK_ENTITY, XpGlowstoneLampBlockEntityRenderer::new);
+
+        // Register HUD
+        HudRenderCallback.EVENT.register(new XpProgressHud());
+
+        LOGGER.info("Reynsla Eldingr mod initialized");
     }
+
+
 }
